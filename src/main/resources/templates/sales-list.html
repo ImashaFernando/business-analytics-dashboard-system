@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sales List</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+
+        table {
+            width: 80%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>💰 Sales List</h1>
+
+<table>
+
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Total</th>
+        <th>Date</th>
+    </tr>
+
+    <tr th:each="s : ${sales}">
+        <td th:text="${s.product.name}"></td>
+        <td th:text="${s.quantity}"></td>
+        <td th:text="${s.total}"></td>
+        <td th:text="${s.date}"></td>
+    </tr>
+
+</table>
+
+<br>
+
+<a href="/dashboard">⬅ Back to Dashboard</a>
+
+</body>
+</html>
