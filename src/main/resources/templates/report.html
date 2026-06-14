@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Report</title>
+
+    <style>
+        :root {
+            --bg: #0d0f14;
+            --card: #161920;
+            --border: #262a35;
+
+            --text: #e6e6e6;
+            --muted: #9aa4b2;
+
+            --purple: #8b7dff;
+            --green: #20c997;
+            --orange: #ffb020;
+            --red: #ff4d4d;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: var(--bg);
+            color: var(--text);
+            padding: 20px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 10px 14px;
+            background: var(--purple);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            opacity: 0.85;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(139,125,255,0.15);
+        }
+
+        .title {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .value {
+            font-size: 22px;
+            margin-top: 10px;
+        }
+
+        .purple { color: var(--purple); }
+        .green { color: var(--green); }
+        .orange { color: var(--orange); }
+        .red { color: var(--red); }
+
+    </style>
+</head>
+
+<body>
+
+<div class="top">
+    <h2>📊 Business Report</h2>
+    <a href="/dashboard" class="btn">⬅ Back</a>
+</div>
+
+<div class="grid">
+
+    <!-- TOTAL REVENUE -->
+    <div class="card">
+        <div class="title">Total Revenue</div>
+        <div class="value purple">Rs. <span th:text="${totalRevenue}">0</span></div>
+    </div>
+
+    <!-- TOTAL SALES -->
+    <div class="card">
+        <div class="title">Total Sales</div>
+        <div class="value green" th:text="${totalSales}">0</div>
+    </div>
+
+    <!-- TOTAL PRODUCTS -->
+    <div class="card">
+        <div class="title">Total Products</div>
+        <div class="value orange" th:text="${totalProducts}">0</div>
+    </div>
+
+    <!-- BEST PRODUCT -->
+    <div class="card">
+        <div class="title">Best Product</div>
+        <div class="value purple" th:text="${bestProduct}">-</div>
+    </div>
+
+    <!-- HIGHEST SALE -->
+    <div class="card">
+        <div class="title">Highest Sale</div>
+        <div class="value green">Rs. <span th:text="${maxSale}">0</span></div>
+    </div>
+
+    <!-- LOWEST SALE -->
+    <div class="card">
+        <div class="title">Lowest Sale</div>
+        <div class="value red">Rs. <span th:text="${minSale}">0</span></div>
+    </div>
+
+</div>
+
+</body>
+</html>

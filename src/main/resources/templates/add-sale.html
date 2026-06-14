@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Sale</title>
+
+    <style>
+
+        :root {
+            --bg: #0d0f14;
+            --card: rgba(22, 25, 32, 0.85);
+            --border: rgba(139,125,255,0.15);
+
+            --text: #e6e6e6;
+            --muted: #9aa4b2;
+
+            --purple: #8b7dff;
+            --green: #20c997;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            background: #0b0d12;
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+
+        .sidebar h2 {
+            color: white;
+        }
+
+        .menu a {
+            display: block;
+            padding: 12px;
+            margin-bottom: 10px;
+            color: var(--muted);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .menu a:hover {
+            background: #1f2430;
+            color: white;
+            transform: translateX(4px);
+        }
+
+        /* MAIN CENTER FIX */
+        .main {
+            margin-left: 220px;
+            width: calc(100% - 220px);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* CARD */
+        .card {
+            width: 500px;
+            padding: 30px;
+
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.08);
+
+            background: #0f1218;
+            color: white;
+
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--purple);
+            box-shadow: 0 0 10px rgba(139,125,255,0.25);
+        }
+
+        /* BUTTONS */
+        .btn {
+            padding: 11px 16px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .save {
+            background: var(--green);
+            color: black;
+        }
+
+        .save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(32,201,151,0.3);
+        }
+
+        .back {
+            background: #2a2f3a;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .back:hover {
+            opacity: 0.8;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>📊 Analytics</h2>
+
+    <div class="menu">
+        <a href="/dashboard">Overview</a>
+        <a href="/products">Products</a>
+        <a href="/sales/add">Sales</a>
+        <a href="/sales/list">Sales List</a>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <div class="card">
+
+        <h2>💰 Add Sale</h2>
+
+        <form action="/sales/save" method="post">
+
+            <label>Select Product</label>
+            <select name="product.id" required>
+                <option value="">-- Select Product --</option>
+
+                <option th:each="p : ${products}"
+                        th:value="${p.id}"
+                        th:text="${p.name}">
+                </option>
+            </select>
+
+            <label>Quantity</label>
+            <input type="number" name="quantity" required>
+
+            <button class="btn save" type="submit">Save Sale</button>
+            <a href="/dashboard" class="btn back">Back</a>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

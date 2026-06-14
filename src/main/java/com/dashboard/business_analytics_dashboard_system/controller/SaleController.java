@@ -22,24 +22,30 @@ public class SaleController {
     @Autowired
     private ProductRepository productRepo;
 
-    // show form
-    @GetMapping
-    public String showSalesPage(Model model){
+    // =========================
+    // OPEN ADD SALE FORM
+    // =========================
+    @GetMapping("/add")
+    public String showAddSale(Model model) {
+
         model.addAttribute("sale", new Sale());
         model.addAttribute("products", productRepo.findAll());
-        return "sale-form";
+
+        return "add-sale";
     }
 
-    // save sale
+    // =========================
+    // SAVE SALE
+    // =========================
     @PostMapping("/save")
-    public String saveSale(@ModelAttribute Sale sale){
+    public String saveSale(@ModelAttribute Sale sale) {
 
         Product product = productRepo.findById(
                 sale.getProduct().getId()
         ).orElse(null);
 
-        if(product == null){
-            return "redirect:/sales";
+        if (product == null || sale.getQuantity() == null || sale.getQuantity() <= 0) {
+            return "redirect:/sales/list";
         }
 
         sale.setProduct(product);
@@ -51,10 +57,29 @@ public class SaleController {
         return "redirect:/sales/list";
     }
 
-    // list page
+    // =========================
+    // SALES LIST
+    // =========================
     @GetMapping("/list")
-    public String viewSales(Model model){
+    public String salesList(Model model) {
         model.addAttribute("sales", saleRepo.findAll());
         return "sales-list";
+    }
+
+    // =========================
+    // DELETE SALE
+    // =========================
+    @GetMapping("/delete/{id}")
+    public String deleteSale(@PathVariable Long id) {
+        saleRepo.deleteById(id);
+        return "redirect:/sales/list";
+    }
+
+    // =========================
+    // SAFETY REDIRECT (IMPORTANT FIX)
+    // =========================
+    @GetMapping
+    public String redirectSales() {
+        return "redirect:/sales/add";
     }
 }
