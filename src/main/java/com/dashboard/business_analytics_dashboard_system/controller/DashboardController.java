@@ -1,10 +1,5 @@
 package com.dashboard.business_analytics_dashboard_system.controller;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-
 import com.dashboard.business_analytics_dashboard_system.model.Sale;
 import com.dashboard.business_analytics_dashboard_system.repository.ProductRepository;
 import com.dashboard.business_analytics_dashboard_system.repository.SaleRepository;
@@ -13,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class DashboardController {
@@ -26,46 +24,42 @@ public class DashboardController {
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
 
+        List<Sale> sales = saleRepo.findAll();   // ✅ ONLY ONCE
+
         // TOTAL COUNTS
         long totalProducts = productRepo.count();
-        long totalSales = saleRepo.count();
+        long totalSales = sales.size();
 
-        model.addAttribute("totalProducts", totalProducts);
-        model.addAttribute("totalSales", totalSales);
-
-        // 💰 TOTAL REVENUE
-        double totalRevenue = saleRepo.findAll()
-                .stream()
+        // TOTAL REVENUE
+        double totalRevenue = sales.stream()
                 .mapToDouble(Sale::getTotal)
                 .sum();
 
+        model.addAttribute("totalProducts", totalProducts);
+        model.addAttribute("totalSales", totalSales);
         model.addAttribute("totalRevenue", totalRevenue);
 
-        // 🏆 BEST PRODUCT + 📊 GROUPED SALES DATA
-        Map<String, Double> productSales = new HashMap<>();
+        // GROUP SALES BY PRODUCT
+        Map<String, Double> productSales = sales.stream()
+                .filter(s -> s.getProduct() != null)
+                .collect(Collectors.groupingBy(
+                        s -> s.getProduct().getName(),
+                        Collectors.summingDouble(Sale::getTotal)
+                ));
 
-        for (Sale s : saleRepo.findAll()) {
-
-            String name = s.getProduct().getName();
-            double total = s.getTotal();
-
-            productSales.put(name,
-                    productSales.getOrDefault(name, 0.0) + total);
-        }
-
-        // Convert Map → Lists for Chart
+        // CHART DATA
         List<String> labels = new ArrayList<>(productSales.keySet());
         List<Double> data = new ArrayList<>(productSales.values());
 
         model.addAttribute("salesLabels", labels);
         model.addAttribute("salesData", data);
 
-        // 🏆 BEST SELLING PRODUCT
+        // BEST PRODUCT
         String bestProduct = productSales.entrySet()
                 .stream()
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
-                .orElse("");
+                .orElse("-");
 
         model.addAttribute("bestProduct", bestProduct);
 
