@@ -27,30 +27,24 @@ public class ReportController {
 
         List<Sale> sales = saleRepo.findAll();
 
-        // TOTAL REVENUE
         double totalRevenue = sales.stream()
                 .mapToDouble(Sale::getTotal)
                 .sum();
 
-        // TOTAL SALES
         int totalSales = sales.size();
 
-        // TOTAL PRODUCTS
         int totalProducts = (int) productRepo.count();
 
-        // MAX SALE
         double maxSale = sales.stream()
                 .mapToDouble(Sale::getTotal)
                 .max()
                 .orElse(0);
 
-        // MIN SALE
         double minSale = sales.stream()
                 .mapToDouble(Sale::getTotal)
                 .min()
                 .orElse(0);
 
-        // BEST PRODUCT
         String bestProduct = sales.stream()
                 .collect(Collectors.groupingBy(
                         s -> s.getProduct().getName(),
@@ -62,7 +56,6 @@ public class ReportController {
                 .map(Map.Entry::getKey)
                 .orElse("-");
 
-        // SEND TO VIEW
         model.addAttribute("totalRevenue", totalRevenue);
         model.addAttribute("totalSales", totalSales);
         model.addAttribute("totalProducts", totalProducts);
@@ -70,6 +63,6 @@ public class ReportController {
         model.addAttribute("maxSale", maxSale);
         model.addAttribute("minSale", minSale);
 
-        return "report";
+        return "report";   // MUST match report.html
     }
 }

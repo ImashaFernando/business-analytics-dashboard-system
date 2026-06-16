@@ -208,8 +208,16 @@
         <canvas id="topProductsChart"></canvas>
 
         <div class="card">
-            <h3>📅 Monthly Report</h3>
-            <p style="color:#9aa4b2;">Sales analytics summary</p>
+            <div class="kpi-title">TODAY SALES</div>
+            <div class="kpi-value" style="color:#20c997;">
+                <span th:if="${todaySales > 0}">
+                    Rs.<span th:text="${#numbers.formatDecimal(todaySales, 1, 2)}"></span>
+                </span>
+                <span th:if="${todaySales == 0}">
+                    No Sales Today
+                </span>
+            </div>
+
         </div>
     </div>
 
