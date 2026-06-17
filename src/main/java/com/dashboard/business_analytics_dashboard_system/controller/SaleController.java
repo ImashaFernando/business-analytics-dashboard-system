@@ -44,13 +44,25 @@ public class SaleController {
                 sale.getProduct().getId()
         ).orElse(null);
 
+        // ❗ CHECK NULL FIRST
         if (product == null || sale.getQuantity() == null || sale.getQuantity() <= 0) {
-            return "redirect:/sales/list";
+            return "redirect:/sales/add";
         }
 
+        // ❗ CHECK STOCK
+        if (product.getQuantity() < sale.getQuantity()) {
+            System.out.println("Not enough stock!");
+            return "redirect:/sales/add";
+        }
+
+        // ❗ REDUCE STOCK
+        product.setQuantity(product.getQuantity() - sale.getQuantity());
+        productRepo.save(product);
+
+        // ❗ SAVE SALE
         sale.setProduct(product);
         sale.setTotal(product.getPrice() * sale.getQuantity());
-        sale.setDate(LocalDate.now());
+        sale.setDate(java.time.LocalDate.now());
 
         saleRepo.save(sale);
 
@@ -62,19 +74,27 @@ public class SaleController {
     // =========================
     @GetMapping("/list")
     public String salesList(Model model) {
-        model.addAttribute("sales", saleRepo.findAll());
+        model.addAttribute("sales", saleRepo.findAllByDeletedFalse());
         return "sales-list";
     }
 
     // =========================
     // DELETE SALE
     // =========================
-    @GetMapping("/delete/{id}")
-    public String deleteSale(@PathVariable Long id) {
-        saleRepo.deleteById(id);
-        return "redirect:/sales/list";
-    }
+    @GetMapping("/restore/{id}")
+    public String restoreSale(@PathVariable Long id) {
 
+        Sale sale = saleRepo.findById(id).orElse(null);
+
+        if (sale != null) {
+
+            // UNDO DELETE
+            sale.setDeleted(false);
+            saleRepo.save(sale);
+        }
+
+        return "redirect:/sales/trash";
+    }
     // =========================
     // SAFETY REDIRECT (IMPORTANT FIX)
     // =========================

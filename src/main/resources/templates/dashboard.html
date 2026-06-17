@@ -151,6 +151,7 @@
         <a href="/sales">Add Sale</a>
         <a href="/sales/list">Sales List</a>
         <a href="/report">Reports</a>
+        <a href="/sales/trash">🗑 Trash Bin</a>
     </div>
 </div>
 
@@ -220,7 +221,36 @@
 
         </div>
     </div>
+    <div class="card">
+        <div class="kpi-title">LOW STOCK ALERT</div>
 
+        <div th:if="${!#lists.isEmpty(lowStockProducts)}">
+
+            <div style="
+            display:inline-block;
+            background:#ff4d4d;
+            color:white;
+            padding:5px 12px;
+            border-radius:8px;
+            font-size:12px;
+            margin-bottom:10px;">
+                LOW STOCK
+            </div>
+
+            <ul style="margin-top:10px;">
+                <li th:each="p : ${lowStockProducts}"
+                    style="color:#ff6b6b;">
+                    ⚠ <span th:text="${p}"></span>
+                </li>
+            </ul>
+
+        </div>
+
+        <div th:if="${#lists.isEmpty(lowStockProducts)}"
+             style="color:#20c997;">
+            ✅ All products are well stocked
+        </div>
+    </div>
 </div>
 
 <!-- SCRIPT -->

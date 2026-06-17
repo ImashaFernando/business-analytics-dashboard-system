@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Trash Bin</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: #0d0f14;
+            color: #e6e6e6;
+            padding: 20px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: #161920;
+            border: 1px solid #262a35;
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #262a35;
+            text-align: left;
+        }
+
+        th {
+            color: #9aa4b2;
+        }
+
+        tr:hover {
+            background: rgba(139,125,255,0.08);
+        }
+
+        .badge {
+            background: #ff4d4d;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            background: #8b7dff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>🗑 Deleted Sales </h2>
+
+<div class="card">
+
+    <span class="badge">Soft Deleted Records</span>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="s : ${deletedSales}">
+            <td th:text="${s.product.name}"></td>
+            <td th:text="${s.quantity}"></td>
+            <td th:text="${s.total}"></td>
+            <td th:text="${s.date}"></td>
+
+            <td>
+                <a th:href="@{'/sales/restore/' + ${s.id}}"
+                   style="background:#20c997;padding:6px 10px;color:white;
+       border-radius:6px;text-decoration:none;">
+                    ♻ Restore
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<br>
+
+<a href="/dashboard" class="btn">⬅ Back to Dashboard</a>
+
+</body>
+</html>

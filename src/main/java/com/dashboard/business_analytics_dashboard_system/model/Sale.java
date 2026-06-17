@@ -19,6 +19,8 @@ public class Sale {
     private Double total;
 
     private LocalDate date;
+    // 👇 ADD THIS HERE
+    private boolean deleted = false;
 
     // getters and setters
 
@@ -41,4 +43,12 @@ public class Sale {
     public LocalDate getDate() { return date; }
 
     public void setDate(LocalDate date) { this.date = date; }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }

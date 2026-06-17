@@ -25,8 +25,7 @@ public class DashboardController {
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
 
-        List<Sale> sales = saleRepo.findAll();   // ✅ ONLY ONCE
-
+        List<Sale> sales = saleRepo.findAllByDeletedFalse();
         // TOTAL COUNTS
         long totalProducts = productRepo.count();
         long totalSales = sales.size();
@@ -48,6 +47,14 @@ public class DashboardController {
                 .sum();
 
         model.addAttribute("todaySales", todaySales);
+
+        List<String> lowStockProducts = productRepo.findAll()
+                .stream()
+                .filter(p -> p.getQuantity() != null && p.getQuantity() < 5)
+                .map(p -> p.getName())
+                .toList();
+
+        model.addAttribute("lowStockProducts", lowStockProducts);
 
         // GROUP SALES BY PRODUCT
         Map<String, Double> productSales = sales.stream()
