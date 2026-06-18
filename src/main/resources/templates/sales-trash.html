@@ -87,11 +87,20 @@
             <td th:text="${s.date}"></td>
 
             <td>
+
                 <a th:href="@{'/sales/restore/' + ${s.id}}"
                    style="background:#20c997;padding:6px 10px;color:white;
-       border-radius:6px;text-decoration:none;">
+       border-radius:6px;text-decoration:none;margin-right:5px;">
                     ♻ Restore
                 </a>
+
+                <a th:href="@{'/sales/delete-permanent/' + ${s.id}}"
+                   onclick="return confirm('⚠ Are you sure you want to permanently delete this sale?')"
+                   style="background:#ff4d4d;padding:6px 10px;color:white;
+       border-radius:6px;text-decoration:none;">
+                    🗑 Delete
+                </a>
+
             </td>
         </tr>
         </tbody>

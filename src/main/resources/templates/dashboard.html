@@ -221,34 +221,65 @@
 
         </div>
     </div>
-    <div class="card">
+    <div class="card" style="margin-top:20px;">
+
         <div class="kpi-title">LOW STOCK ALERT</div>
 
-        <div th:if="${!#lists.isEmpty(lowStockProducts)}">
+        <div style="
+        margin-top:10px;
+        padding:10px;
+        border-radius:12px;
+        background:#1a1d25;
+        border:1px solid #2a2f3a;">
 
+            <!-- HEADER BADGE -->
             <div style="
             display:inline-block;
             background:#ff4d4d;
             color:white;
-            padding:5px 12px;
-            border-radius:8px;
+            padding:5px 10px;
+            border-radius:6px;
             font-size:12px;
             margin-bottom:10px;">
-                LOW STOCK
+                ⚠ LOW STOCK
             </div>
 
-            <ul style="margin-top:10px;">
-                <li th:each="p : ${lowStockProducts}"
-                    style="color:#ff6b6b;">
-                    ⚠ <span th:text="${p}"></span>
-                </li>
-            </ul>
+            <!-- LIST -->
+            <div th:each="p : ${lowStockProducts}"
+                 style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                padding:10px;
+                margin-bottom:8px;
+                border-radius:8px;
+                background:#12151c;">
 
-        </div>
+                <!-- PRODUCT NAME -->
+                <div style="font-weight:500;">
+                    <span th:text="${p.name}"></span>
+                </div>
 
-        <div th:if="${#lists.isEmpty(lowStockProducts)}"
-             style="color:#20c997;">
-            ✅ All products are well stocked
+                <!-- QTY -->
+                <div style="opacity:0.8;">
+                    Qty: <span th:text="${p.qty}"></span>
+                </div>
+
+                <!-- STATUS -->
+                <div>
+                <span th:if="${p.status == 'CRITICAL'}"
+                      style="background:#ff4d4d;color:white;padding:4px 8px;border-radius:6px;font-size:12px;">
+                    CRITICAL
+                </span>
+
+                    <span th:if="${p.status == 'WARNING'}"
+                          style="background:#ffb020;color:black;padding:4px 8px;border-radius:6px;font-size:12px;">
+                    WARNING
+                </span>
+                </div>
+
+            </div>
+
         </div>
     </div>
 </div>

@@ -95,11 +95,38 @@ public class SaleController {
 
         return "redirect:/sales/trash";
     }
+    @GetMapping("/delete-permanent/{id}")
+    public String deletePermanent(@PathVariable Long id) {
+
+        saleRepo.deleteById(id);
+
+        return "redirect:/sales/trash";
+    }
     // =========================
     // SAFETY REDIRECT (IMPORTANT FIX)
     // =========================
     @GetMapping
     public String redirectSales() {
         return "redirect:/sales/add";
+    }
+    @GetMapping("/delete/{id}")
+    public String deleteSale(@PathVariable Long id) {
+
+        Sale sale = saleRepo.findById(id).orElse(null);
+
+        if (sale != null && sale.getProduct() != null) {
+
+            Product product = sale.getProduct();
+
+            // 🔥 RESTORE STOCK BACK
+            product.setQuantity(product.getQuantity() + sale.getQuantity());
+            productRepo.save(product);
+
+            // 🔥 SOFT DELETE SALE
+            sale.setDeleted(true);
+            saleRepo.save(sale);
+        }
+
+        return "redirect:/sales/list";
     }
 }
