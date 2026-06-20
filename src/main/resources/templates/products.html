@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="aa">
 <head>
     <title>Products</title>
 
@@ -10,21 +10,24 @@
             --border: #262a35;
             --text: #e6e6e6;
             --muted: #9aa4b2;
+
             --purple: #8b7dff;
             --green: #20c997;
             --red: #ff4d4d;
             --yellow: #ffb020;
         }
 
+        /* RESET */
         body {
             margin: 0;
-            font-family: Arial;
+            font-family: 'Segoe UI', Arial, sans-serif;
             background: var(--bg);
             color: var(--text);
         }
 
+        /* CONTAINER */
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: auto;
             padding: 30px;
         }
@@ -34,21 +37,24 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
+        /* TITLE */
         h2 {
             margin: 0;
         }
 
-        /* BUTTONS */
+        /* ================= BUTTONS ================= */
+
         .btn {
             padding: 10px 14px;
             border-radius: 10px;
             text-decoration: none;
             color: white;
             font-size: 14px;
-            transition: 0.3s;
+            transition: 0.25s;
+            display: inline-block;
         }
 
         .btn-primary {
@@ -67,63 +73,77 @@
             background: #3a4050;
         }
 
-        /* TABLE CARD */
+        /* ================= CARD ================= */
+
         .card {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 15px;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
         }
+
+        /* ================= TABLE ================= */
 
         table {
             width: 100%;
             border-collapse: collapse;
-            color: var(--text);
+            font-size: 14px;
         }
 
         thead {
             background: #1f2430;
         }
 
-        th, td {
-            padding: 12px;
+        th {
             text-align: left;
+            padding: 14px;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        td {
+            padding: 14px;
             border-bottom: 1px solid var(--border);
         }
 
         tr:hover {
-            background: #1a1f2a;
+            background: rgba(255,255,255,0.03);
+            transition: 0.2s;
         }
 
-        /* ACTION BUTTONS */
+        /* ================= ACTION BUTTONS ================= */
+
         .btn-sm {
             padding: 6px 10px;
             border-radius: 8px;
             font-size: 12px;
             text-decoration: none;
             margin-right: 5px;
+            display: inline-block;
+            transition: 0.2s;
         }
 
+        /* EDIT BUTTON */
         .edit {
             background: var(--yellow);
             color: black;
         }
 
+        /* DELETE BUTTON */
         .delete {
             background: var(--red);
             color: white;
         }
 
-        .edit:hover {
-            opacity: 0.8;
+        /* HOVER EFFECT */
+        .btn-sm:hover {
+            transform: scale(1.05);
+            opacity: 0.85;
         }
-
-        .delete:hover {
-            opacity: 0.8;
-        }
-
     </style>
 </head>
+
 
 <body>
 
@@ -141,40 +161,76 @@
     </div>
 
     </div>
+<div class="card">
 
-    <!-- TABLE -->
-    <div class="card">
+    <table>
 
-        <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Stock Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
 
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
+        <tbody>
 
-            <tbody>
-            <tr th:each="p : ${products}">
-                <td th:text="${p.name}"></td>
-                <td th:text="${p.price}"></td>
-                <td th:text="${p.quantity}"></td>
+        <tr th:each="p : ${products}">
 
-                <td>
-                    <a th:href="@{'/products/edit/' + ${p.id}}" class="btn-sm edit">Edit</a>
-                    <a th:href="@{'/products/delete/' + ${p.id}}" class="btn-sm delete"
-                       onclick="return confirm('Are you sure?')">Delete</a>
-                </td>
-            </tr>
-            </tbody>
+            <td th:text="${p.name}"></td>
 
-        </table>
+            <td th:text="${p.price}"></td>
 
-    </div>
+            <td th:text="${p.quantity}"></td>
+
+            <!-- STOCK STATUS (FIXED) -->
+            <td>
+
+                <span th:if="${p.quantity <= 0}" class="badge out">
+                    OUT OF STOCK
+                </span>
+
+                <span th:if="${p.quantity > 0 and p.quantity <= 5}" class="badge low">
+                    LOW
+                </span>
+
+                <span th:if="${p.quantity > 5}" class="badge ok">
+                    OK
+                </span>
+
+            </td>
+
+            <!-- ACTIONS (FIXED) -->
+            <td>
+
+                <a th:href="@{'/products/edit/' + ${p.id}}"
+                   class="btn-sm edit">
+                    Edit
+                </a>
+
+                <a th:href="@{'/products/delete/' + ${p.id}}"
+                   class="btn-sm delete"
+                   onclick="return confirm('Are you sure?')">
+                    Delete
+                </a>
+
+            </td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
 
 </div>
+
+
+
+
+
+
 
 </body>
 </html>

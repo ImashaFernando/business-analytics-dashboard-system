@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
     @Autowired
-    private ProductRepository repo;
+    private ProductRepository productRepo;
 
     @GetMapping
     public String list(Model model){
-        model.addAttribute("products", repo.findAll());
+        model.addAttribute("products", productRepo.findAll());
         return "products";
     }
 
@@ -28,18 +28,21 @@ public class ProductController {
 
     @PostMapping("/save")
     public String save(@ModelAttribute Product product){
-        repo.save(product);
+        productRepo.save(product);
         return "redirect:/products";
     }
+
     @GetMapping("/edit/{id}")
     public String editProduct(@PathVariable Long id, Model model){
-        Product product = repo.findById(id).orElse(null);
+        Product product = productRepo.findById(id).orElse(null);
         model.addAttribute("product", product);
         return "product-form";
     }
+
+    // ✅ DELETE (IMPORTANT FIX)
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id){
-        repo.deleteById(id);
+        productRepo.deleteById(id);
         return "redirect:/products";
     }
 }

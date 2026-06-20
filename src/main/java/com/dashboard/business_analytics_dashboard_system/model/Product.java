@@ -12,6 +12,7 @@ public class Product {
     private String name;
     private Double price;
     private Integer quantity;
+    private boolean deleted = false;
 
     // getters and setters
     public Long getId() { return id; }
